@@ -6,6 +6,8 @@ router.get("/get", authentication, listCtrl.getList);
 
 router.post("/create", authentication, listCtrl.create);
 
+router.post("/delete", authentication, listCtrl.delete);
+
 //router.post("/edit", authentication, listCtrl.edit);
 
 module.exports = router;

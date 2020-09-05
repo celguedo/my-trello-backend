@@ -11,14 +11,32 @@ const listCtrl = {};
 listCtrl.create = async (req, res, next) => {
   try {
     const { nameList } = req.body;
-    const positionMax = (await List.find().sort({ position: 1 })[0]) || 0;
+    const listMax = await List.find().sort({ age: -1 }).limit(1);
+    const position = listMax.length === 0 ? 0 : listMax[0].position;
     const newList = new List({
       name: nameList,
-      position: positionMax + 1
+      position: +position + 1,
     });
     await newList.save();
     res.json({
-      message: "list created"
+      message: "list created",
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+listCtrl.delete = async (req, res, next) => {
+  try {
+    const { id } = req.body;
+    const currentList = await List.find({ _id: id });
+    if (!currentList)
+      return res
+        .status(400)
+        .json({ msg: "The list don't exists on the database" });
+    await List.deleteOne({ _id: id });
+    res.json({
+      message: "list delete",
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -28,7 +46,6 @@ listCtrl.create = async (req, res, next) => {
 listCtrl.getList = async (req, res, next) => {
   try {
     const lists = await List.find();
-    console.log("listCtrl.getList -> lists", lists);
     res.json({
       lists,
     });
