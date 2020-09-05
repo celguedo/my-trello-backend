@@ -62,14 +62,16 @@ userCtrl.login = async (req, res, next) => {
         .status(400)
         .json({ msg: "No account with this email has been registered." });
 
-    const isMatch = await user.correctPassword(password, (err, match)=>{
-        if(err) console.log('An error happens');
-        return match;
-      });
-    console.log("userCtrl.postLogin -> isMatch", isMatch)
+    const isMatch = await user.correctPassword(password, (err, match) => {
+      if (err) console.log("An error happens");
+      return match;
+    });
+    console.log("userCtrl.postLogin -> isMatch", isMatch);
     if (!isMatch) return res.status(400).json({ msg: "Invalid credentials." });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {expiresIn: '1d'});
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
     res.json({
       token,
       user: {
@@ -83,13 +85,13 @@ userCtrl.login = async (req, res, next) => {
 };
 
 userCtrl.logout = async (req, res) => {
-    const token = req.header("x-auth-token");
-    if (!token) return res.json(false);
-    
-    const verified = jwt.verify(token, process.env.JWT_SECRET);
-    if (!verified) return res.json(false);
+  const token = req.header("x-auth-token");
+  if (!token) return res.json(false);
 
-    return res.json(true);
+  const verified = jwt.verify(token, process.env.JWT_SECRET);
+  if (!verified) return res.json(false);
+
+  return res.json(true);
 };
 
 userCtrl.tokenIsValid = async (req, res) => {
@@ -109,9 +111,11 @@ userCtrl.tokenIsValid = async (req, res) => {
   }
 };
 
-userCtrl.test = async (req, res) => {
+userCtrl.getUser = async (req, res) => {
+  const user = await User.findById(req.user);
   res.json({
-    status: "Llego al test",
+    displayName: user.displayName,
+    id: user._id,
   });
 };
 

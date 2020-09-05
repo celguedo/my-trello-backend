@@ -12,12 +12,6 @@ router.post("/login", userCtrl.login);
 
 router.post("/tokenIsValid", userCtrl.tokenIsValid);
 
-router.get("/", authentication, async (req, res) => {
-  const user = await User.findById(req.user);
-  res.json({
-    displayName: user.displayName,
-    id: user._id,
-  });
-});
+router.get("/", authentication, userCtrl.getUser);
 
 module.exports = router;
