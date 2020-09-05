@@ -1,7 +1,5 @@
 const router = require("express").Router();
-const bcrypt = require("bcryptjs");
 const authentication = require("../utils/authentication");
-const User = require("../models/userModel");
 const userCtrl = require("../controllers/userCtrl");
 
 router.post("/register", userCtrl.singup);
