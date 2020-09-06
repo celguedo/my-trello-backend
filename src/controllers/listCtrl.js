@@ -8,7 +8,7 @@ const List = require("../models/listModel");
 //Controller to export
 const listCtrl = {};
 
-listCtrl.create = async (req, res, next) => {
+listCtrl.create = async (req, res) => {
   try {
     const { nameList } = req.body;
     const listMax = await List.find().sort({ age: -1 }).limit(1);
@@ -26,7 +26,7 @@ listCtrl.create = async (req, res, next) => {
   }
 };
 
-listCtrl.delete = async (req, res, next) => {
+listCtrl.delete = async (req, res) => {
   try {
     const { id } = req.body;
     const currentList = await List.find({ _id: id });
@@ -43,7 +43,7 @@ listCtrl.delete = async (req, res, next) => {
   }
 };
 
-listCtrl.getList = async (req, res, next) => {
+listCtrl.getLists = async (req, res) => {
   try {
     const lists = await List.find();
     res.json({

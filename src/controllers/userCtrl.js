@@ -48,7 +48,7 @@ userCtrl.singup = async (req, res, next) => {
   }
 };
 
-userCtrl.login = async (req, res, next) => {
+userCtrl.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
