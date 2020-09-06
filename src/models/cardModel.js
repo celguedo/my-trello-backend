@@ -6,7 +6,7 @@ const cardSchema = new mongoose.Schema({
   color: { type: String, default: "info" },
   createdAt: { type: Date, default: Date.now() },
   status: { type: Boolean, default: true },
-  position: { type: String, required: true },
+  priority: { type: String, required: true },
   createdBy:{type: Object, required: true },
   listId:{type: Object, required: true },
   nameCreatedBy:{type: String, required: true },

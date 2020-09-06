@@ -17,12 +17,12 @@ cardCtrl.create = async (req, res) => {
       return res
         .status(400)
         .json({ msg: "The current user can't create a card" });
-    const { title, listId, description, color, position } = req.body;
+    const { title, listId, description, color, priority } = req.body;
 
     const newCard = new Card({
       title,
       description,
-      position,
+      priority,
       createdBy: user._id,
       color,
       listId: new mongoose.mongo.ObjectId(listId),
@@ -40,12 +40,15 @@ cardCtrl.create = async (req, res) => {
 
 cardCtrl.update = async (req, res) => {
   try {
-    const { listId, idCard } = req.body;
-
-    if (!listId)
-      return res
-        .status(400)
-        .json({ msg: "Please specify which fields to update" });
+    const {
+      listId,
+      idCard,
+      status,
+      title,
+      description,
+      color,
+      priority,
+    } = req.body;
 
     const existsCard = await Card.findOne({ _id: idCard });
     if (!existsCard)
@@ -53,9 +56,15 @@ cardCtrl.update = async (req, res) => {
         .status(400)
         .json({ msg: "The Card don't exists on the database" });
 
-    existsCard.listId = listId
-      ? new mongoose.mongo.ObjectId(listId)
-      : existsCard.listId;
+    if (!listId)
+      existsCard.listId = listId
+        ? new mongoose.mongo.ObjectId(listId)
+        : existsCard.listId;
+    if (existsCard.status !== status) existsCard.status = status;
+    if (title) existsCard.title = title;
+    if (description) existsCard.description = description;
+    if (color) existsCard.color = color;
+    if (priority) existsCard.priority = priority;
     await existsCard.save();
     res.json({
       message: "Card updated",
@@ -94,7 +103,6 @@ cardCtrl.getCards = async (req, res) => {
     if (own === "true") filters.createdBy = user._id;
     if (archive === "true") filters.status = false;
 
-    console.log("cardCtrl.getCards -> filters", filters);
     const cards = await Card.find(filters);
     res.json({
       cards,
