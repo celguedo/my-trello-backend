@@ -28,7 +28,7 @@ listCtrl.create = async (req, res) => {
 
 listCtrl.delete = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     const currentList = await List.find({ _id: id });
     if (!currentList)
       return res
