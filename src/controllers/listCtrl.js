@@ -3,7 +3,9 @@
  * @version 0.0.1
  * File in charge of managing and controlling the operations requested to the api
  */
+const mongoose = require("mongoose");
 const List = require("../models/listModel");
+const Card = require("../models/cardModel");
 
 //Controller to export
 const listCtrl = {};
@@ -34,7 +36,12 @@ listCtrl.delete = async (req, res) => {
       return res
         .status(400)
         .json({ msg: "The list don't exists on the database" });
+
     await List.deleteOne({ _id: id });
+    //delete cards of the board:
+    await Card.deleteMany({
+      listId: new mongoose.mongo.ObjectId(id),
+    });
     res.json({
       message: "list delete",
     });
