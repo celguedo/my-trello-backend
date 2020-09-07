@@ -47,6 +47,8 @@ app.use("/list", require("./routes/listRoute"));
 
 app.use("/card", require("./routes/cardRoute"));
 
+app.use("/lambda", require("./routes/trelloData"));
+
 app.use("/health", (req, res) => {
   res.send({
     message: "Api initializated",
