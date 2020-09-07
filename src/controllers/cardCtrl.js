@@ -56,10 +56,9 @@ cardCtrl.update = async (req, res) => {
         .status(400)
         .json({ msg: "The Card don't exists on the database" });
 
-    if (!listId)
-      existsCard.listId = listId
-        ? new mongoose.mongo.ObjectId(listId)
-        : existsCard.listId;
+    //Validation fields to update
+    if (listId && existsCard.listId != listId)
+      existsCard.listId = new mongoose.mongo.ObjectId(listId);
     if (existsCard.status !== status) existsCard.status = status;
     if (title) existsCard.title = title;
     if (description) existsCard.description = description;
