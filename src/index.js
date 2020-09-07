@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const { mapMongoDBStatus } = require("./utils");
 require("dotenv").config();
 
 // set up express
@@ -47,5 +48,8 @@ app.use("/list", require("./routes/listRoute"));
 app.use("/card", require("./routes/cardRoute"));
 
 app.use("/health", (req, res) => {
-  res.send({ message: "Api initializated" });
+  res.send({
+    message: "Api initializated",
+    databases: { MongoDB: mapMongoDBStatus(mongoose.connection.readyState) },
+  });
 });
